@@ -3,17 +3,14 @@
 Extracts a post from one page using the TFL Devotions Extractor from the PDF.
 """
 
-import re
-
-import pymupdf
-
 from tfl_devotions_extractor import extract_pdf_page
 
 if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 3:
-        print(f"Usage: {sys.argv[0]} <input.pdf> <page_number>", file=sys.stderr)
+        print(f"Usage: {sys.argv[0]} <input.pdf> <page_number>",
+              file=sys.stderr)
         sys.exit(1)
 
     pdf_path = sys.argv[1]
