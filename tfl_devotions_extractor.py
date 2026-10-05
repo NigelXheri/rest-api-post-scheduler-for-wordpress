@@ -70,16 +70,16 @@ def extract_page(page):
     for b in page.get_text("rawdict")["blocks"]:
         if b["type"] != 0:
             continue
-        for l in b["lines"]:
-            spans = [s for s in l["spans"] if span_text(s).strip()]
+        for line in b["lines"]:
+            spans = [s for s in line["spans"] if span_text(s).strip()]
             if not spans:
                 continue
             real = [s for s in spans if s["size"] >= 7]  # ignore superscripts
             main = max(real or spans, key=lambda s: s["size"] * len(span_text(s)))
             lines.append(
                 {
-                    "raw": l,
-                    "text": line_text(l),
+                    "raw": line,
+                    "text": line_text(line),
                     "size": main["size"],
                     "font": main["font"],
                     "x": min(s["bbox"][0] for s in spans),
@@ -89,7 +89,7 @@ def extract_page(page):
                     "dropcap": any(s["size"] > 20 for s in spans),
                 }
             )
-    lines.sort(key=lambda l: (l["y"], l["x"]))
+    lines.sort(key=lambda line: (line["y"], line["x"]))
 
     result = {
         "date": None,
@@ -102,23 +102,23 @@ def extract_page(page):
     }
 
     body_lines, body_started = [], False
-    for l in lines:
-        t, brandon = l["text"], "Brandon" in l["font"]
+    for line in lines:
+        t, brandon = line["text"], "Brandon" in line["font"]
         # skip footer: page number + "Plani i leximit..."
         if "Plani i leximit" in t or re.fullmatch(r"\d+", t):
             continue
-        if l["dropcap"]:
-            body_lines.append(l)
+        if line["dropcap"]:
+            body_lines.append(line)
             body_started = True
-        elif brandon and l["size"] >= 13:  # title
-            result["title"] = despace_letters(l["raw"])
-        elif brandon and l["size"] >= 9.5:  # date
+        elif brandon and line["size"] >= 13:  # title
+            result["title"] = despace_letters(line["raw"])
+        elif brandon and line["size"] >= 9.5:  # date
             result["date"] = t
         elif brandon and not body_started:  # quote reference
             result["quote_ref"] = t
         elif brandon and body_started:  # closing verse
             result["closing_verse"] = t.strip()
-        elif l["size"] < 8.5:  # footnotes
+        elif line["size"] < 8.5:  # footnotes
             t = re.sub(r"[\x00-\x1f]+", " ", t).strip()
             m = re.match(r"^(\d+)\s+(.*)", t)
             if m:
@@ -127,29 +127,36 @@ def extract_page(page):
                 fn = result["footnotes"][-1]
                 fn["text"] = join_lines([fn["text"], t])
         elif result["title"] and result["quote_ref"] is None:  # quote lines
-            q = t.strip("“” ")
+            q = t.strip(
+                " "
+            )  # The quote characters are not stripped from the quote itself here as they are part of the text
             result["quote"] = join_lines([result["quote"], q]) if result["quote"] else q
         else:  # body text
-            body_lines.append(l)
+            body_lines.append(line)
             body_started = True
 
     # --- body -> paragraphs (indented first line = new paragraph;
     #     consecutive indented all-italic lines = one verse block) ---
     paragraphs, dropcap = [], ""
-    for l in body_lines:
-        if l["dropcap"]:
+    for line in body_lines:
+        if line["dropcap"]:
             dropcap = "".join(
-                span_text(s).strip() for s in l["raw"]["spans"] if s["size"] > 20
+                span_text(s).strip() for s in line["raw"]["spans"] if s["size"] > 20
             )
             continue
-        indented = 63 < l["x"] < 75  # 68 = indent; 81.5 = drop-cap wrap
-        if indented and l["all_italic"] and paragraphs and paragraphs[-1][1] == "verse":
-            paragraphs[-1][0].append(l["text"])  # verse continues
+        indented = 63 < line["x"] < 75  # 68 = indent; 81.5 = drop-cap wrap
+        if (
+            indented
+            and line["all_italic"]
+            and paragraphs
+            and paragraphs[-1][1] == "verse"
+        ):
+            paragraphs[-1][0].append(line["text"])  # verse continues
         elif indented or not paragraphs:
-            kind = "verse" if (indented and l["all_italic"]) else "prose"
-            paragraphs.append(([l["text"]], kind))
+            kind = "verse" if (indented and line["all_italic"]) else "prose"
+            paragraphs.append(([line["text"]], kind))
         else:
-            paragraphs[-1][0].append(l["text"])  # wrapped line
+            paragraphs[-1][0].append(line["text"])  # wrapped line
 
     out = [join_lines(t) if k == "prose" else "\n".join(t) for t, k in paragraphs]
     if dropcap and out:
@@ -164,9 +171,25 @@ def extract_pdf(path):
         return [extract_page(p) for p in doc]
 
 
+def extract_pdf_page(path, page_number):
+    """Extract a single page (1-indexed) from a PDF into post data."""
+    with pymupdf.open(path) as doc:
+        if not 1 <= page_number <= doc.page_count:
+            raise ValueError(
+                f"Page {page_number} out of range (document has {doc.page_count} pages)"
+            )
+        return extract_page(doc[page_number - 1])
+
+
 if __name__ == "__main__":
     import json
     import sys
 
-    data = extract_pdf(sys.argv[1] if len(sys.argv) > 1 else "input.pdf")
+    if len(sys.argv) < 3:
+        print("Usage: extract.py <input.pdf> <page_number>", file=sys.stderr)
+        sys.exit(1)
+
+    pdf_path = sys.argv[1]
+    page_num = int(sys.argv[2])
+    data = extract_pdf_page(pdf_path, page_num)
     print(json.dumps(data, ensure_ascii=False, indent=2))
