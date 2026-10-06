@@ -8,23 +8,23 @@ from yt_service import list_scheduled_videos
 
 
 
-def find_videos(pattern: str):
+def find_videos(pattern: str, case_sensitive: bool = True):
     """All scheduled videos whose title matches `pattern` (case-insensitive).
 
     Uses re.search, so the pattern can match anywhere in the title
     unless you anchor it yourself (^ for start, $ for end).
     """
     try:
-        rx = re.compile(pattern, re.IGNORECASE)
+        rx = re.compile(pattern, re.IGNORECASE) if case_sensitive else re.compile(pattern)
     except re.error as e:
         raise ValueError(f"Invalid regex {pattern!r}: {e}") from e
 
     return [video for video in list_scheduled_videos() if rx.search(video["title"])]
 
 
-def find_video(pattern: str):
+def find_video(pattern: str, case_sensitive: bool = True):
     """Exactly one match, or raise with a clear message."""
-    matches = find_videos(pattern)
+    matches = find_videos(pattern, case_sensitive)
     if not matches:
         raise LookupError(f"No scheduled video matching: {pattern!r}")
     if len(matches) > 1:
