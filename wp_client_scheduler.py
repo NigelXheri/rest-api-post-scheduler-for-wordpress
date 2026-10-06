@@ -1,7 +1,10 @@
-import requests
-from requests.auth import HTTPBasicAuth
+import argparse
 import os
+
+import requests
 from dotenv import load_dotenv
+from requests.auth import HTTPBasicAuth
+
 """Schedules WordPress Posts via REST API"""
 
 # Load variables from .env into os.environ

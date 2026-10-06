@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Search the authenticated user's scheduled YouTube videos by regex."""
-
 import re
 import sys
+
 from yt_service import list_scheduled_videos
+
+"""Search the authenticated user's scheduled YouTube videos by regex."""
+
 
 
 def find_videos(pattern: str):

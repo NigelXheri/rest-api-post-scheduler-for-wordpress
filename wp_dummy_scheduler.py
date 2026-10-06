@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import json
+import os
 
 import requests
-from requests.auth import HTTPBasicAuth
-import os
 from dotenv import load_dotenv
+from requests.auth import HTTPBasicAuth
+
 """This script will schedule posts via
     the REST API to a fresh WordPress installation."""
 
@@ -28,11 +29,7 @@ payload = {
 }
 
 resp = requests.post(
-    f"{WP_URL}/wp-json/wp/v2/posts",
-    json=payload,
-    auth=auth,
-    timeout=30,
-    verify=False
+    f"{WP_URL}/wp-json/wp/v2/posts", json=payload, auth=auth, timeout=30, verify=False
 )
 
 resp.raise_for_status()

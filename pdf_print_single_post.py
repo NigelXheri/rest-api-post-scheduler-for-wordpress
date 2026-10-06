@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+from pdf_extractor import extract_pdf_page
+
 """
-Extracts a post from one page using the TFL Devotions Extractor from the PDF.
+    Extracts a post from one page of the PDF using pdf_extractor.
 """
 
-from tfl_devotions_extractor import extract_pdf_page
 
 if __name__ == "__main__":
     import sys
