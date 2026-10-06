@@ -13,6 +13,8 @@ import re
 
 import pymupdf
 
+# Characters that may appear as a line-break hyphen in a PDF.
+HYPHENS = "-\u00ad\u2010\u2011\u2012\u2013"
 SUPERSCRIPTS = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
 
 
@@ -56,8 +58,9 @@ def join_lines(lines):
     'Aborigi-' + 'nes' -> 'Aborigines'."""
     out = ""
     for t in lines:
-        if out.endswith("\u00ad"):
-            out = out[:-1] + t  # de-hyphenate
+        stripped = out.rstrip()
+        if stripped and stripped[-1] in HYPHENS:
+            out = stripped[:-1] + t   # previous line ended in a hyphen -> join
         elif out:
             out += " " + t
         else:
@@ -137,6 +140,21 @@ def extract_page(page):
 
     # --- body -> paragraphs (indented first line = new paragraph;
     #     consecutive indented all-italic lines = one verse block) ---
+    # The PDF is a book: left and right pages have different absolute left
+    # margins. Anchor the indent check to the dropcap's x-position (the body
+    # text's left edge) so it works on both sides.
+    dropcap_x = next((l["x"] for l in body_lines if l["dropcap"]), None)
+    if dropcap_x is None:
+        # No dropcap on this page — fall back to the leftmost body line.
+        dropcap_x = min((l["x"] for l in body_lines), default=0)
+
+    # Offsets relative to the dropcap / body left edge:
+    #   wrapped lines      ≈ dropcap_x + 0
+    #   indented paragraph ≈ dropcap_x + 5
+    #   dropcap-wrap lines ≈ dropcap_x + 18  (NOT treated as an indent)
+    indent_lo = dropcap_x + 3
+    indent_hi = dropcap_x + 12
+
     paragraphs, dropcap = [], ""
     for line in body_lines:
         if line["dropcap"]:
@@ -144,7 +162,7 @@ def extract_page(page):
                 span_text(s).strip() for s in line["raw"]["spans"] if s["size"] > 20
             )
             continue
-        indented = 63 < line["x"] < 75  # 68 = indent; 81.5 = drop-cap wrap
+        indented = indent_lo < line["x"] < indent_hi
         if (
             indented
             and line["all_italic"]
@@ -186,10 +204,11 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 3:
-        print("Usage: extract.py <input.pdf> <page_number>", file=sys.stderr)
+        print(f"Usage: {sys.argv[0]} <input.pdf> <page_number>", file=sys.stderr)
         sys.exit(1)
 
     pdf_path = sys.argv[1]
     page_num = int(sys.argv[2])
     data = extract_pdf_page(pdf_path, page_num)
     print(json.dumps(data, ensure_ascii=False, indent=2))
+    print("Number of paragraphs: ", len(data['paragraphs']))
