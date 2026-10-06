@@ -1,0 +1,16 @@
+# --- Core HTTP ---
+requests==2.32.3
+requests-toolbelt==1.0.0   # optional, useful for multipart/multipart-encoded auth
+
+# --- Environment variables ---
+python-dotenv==1.0.1
+
+# --- Google / YouTube API ---
+google-api-python-client==2.149.0
+google-auth==2.35.0
+google-auth-oauthlib==1.2.1
+google-auth-httplib2==0.2.0
+
+# --- Extra ---
+argparse
+pymupdf
