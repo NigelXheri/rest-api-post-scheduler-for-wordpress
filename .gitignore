@@ -4,5 +4,9 @@
 credentials.json
 token.json
 __pycache__/
+cookies.txt
+thumbnails/
 
 tfl.pdf
+
+README.md

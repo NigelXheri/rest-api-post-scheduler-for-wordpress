@@ -69,5 +69,5 @@ if __name__ == "__main__":
 
     pdf_path = sys.argv[1]
     page_num = int(sys.argv[2])
-    package = package_specific_post("/mnt/c/Users/NAJXHELL/Downloads/TFL - 365 lexime ditore_V1_Teksti_251125.pdf", 289)
+    package = package_specific_post(pdf_path,page_num)
     print(package)

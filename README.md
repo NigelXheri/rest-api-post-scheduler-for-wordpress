@@ -16,7 +16,7 @@ New-NetFirewallRule -DisplayName "Allow WSL to LocalWP" `
 Remove-NetFirewallRule -DisplayName "Allow WSL to LocalWP HTTPS"```
 
 ### TODOS
-- [] Next time, you will need to find the video from the scheduled videos from the YouTube API by searching the date in the title (for example: "4 tetor") and then use the YouTube video title for the final post title. That is so that the capitalization of the Title is correct because the PDF doesn't contain that information. 
-- [] Also, the block tags should be added to the content so that it doens't need to later be converted.
-- [] Handle photo search, upload and compression 
+- [x] Next time, you will need to find the video from the scheduled videos from the YouTube API by searching the date in the title (for example: "4 tetor") and then use the YouTube video title for the final post title. That is so that the capitalization of the Title is correct because the PDF doesn't contain that information. 
+- [x partly] Also, the block tags should be added to the content so that it doens't need to later be converted.
+- [] Handle photo search, upload and compression as featured images
 - [] Make it check for existing schedulings and only schedule posts that have their videos already uploaded, starting from next day's date
