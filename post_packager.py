@@ -44,7 +44,7 @@ def package_specific_post(pdf_path, page_num):
         + paragraphs_html
     )
 
-    excrept = data['paragraphs'][0][:150]
+    excrept = data['paragraphs'][0][:200]
 
     packaged_post = {
         "title": youtube_video_title,
