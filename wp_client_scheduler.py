@@ -74,9 +74,11 @@ def schedule_post(pdf_path: str, page_num: int) -> dict:
     post untouched if one is already present.
     """
     # 1. Build the payload from the PDF page.
+    print("1. Building the payload from the PDF page")
     payload = package_specific_post(pdf_path, page_num)
 
     # 2. Idempotency gate — check by slug before doing any expensive work.
+    print("2. Idempotency gate — check by slug before doing any expensive work")
     existing  = find_post_by_slug(payload["title"])
     is_update = bool(existing) and ON_EXISTING == "update"
 
