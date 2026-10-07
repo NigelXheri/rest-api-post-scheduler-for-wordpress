@@ -59,6 +59,10 @@ def package_specific_post(pdf_path, page_num):
         }
     }
 
+    # Not a WP field. The scheduler pops this, fetches the featured image,
+    # and discards it before POSTing.
+    packaged_post["_yt_video"] = video
+
     return packaged_post 
 
 if __name__ == "__main__":
