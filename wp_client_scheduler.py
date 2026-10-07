@@ -78,7 +78,7 @@ def schedule_post(pdf_path: str, page_num: int) -> dict:
     payload = package_specific_post(pdf_path, page_num)
 
     # 2. Idempotency gate — check by slug before doing any expensive work.
-    print("2. Idempotency gate — check by slug before doing any expensive work")
+    print("2. Checking if post already exists")
     existing  = find_post_by_slug(payload["title"])
     is_update = bool(existing) and ON_EXISTING == "update"
 
