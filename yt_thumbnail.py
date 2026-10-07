@@ -17,14 +17,19 @@ import tempfile
 import time
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from wp_slug import wp_slug
+
+load_dotenv()
 
 THUMB_DIR = Path("thumbnails")
 COOKIES = os.getenv("YT_COOKIES", "cookies.txt")
-DEFAULT_AT_SECONDS = 3
-DEFAULT_WEBP_QUALITY = 70
-DEFAULT_WEBP_METHOD = 6
-DEFAULT_WIDTH = 800  # <-- New default width for WordPress cards
+
+DEFAULT_AT_SECONDS   = int(os.getenv("THUMB_AT_SECONDS", "3"))
+DEFAULT_WEBP_QUALITY = int(os.getenv("THUMB_QUALITY",    "70"))
+DEFAULT_WEBP_METHOD  = 6
+DEFAULT_WIDTH        = int(os.getenv("THUMB_WIDTH",      "800"))
 
 _MIN_VALID_BYTES = 10_000
 _TRANSIENT = "the page needs to be reloaded"
@@ -34,7 +39,7 @@ def fetch_thumbnail(video_id: str, video_title: str | None = None,
                     at_seconds: int = DEFAULT_AT_SECONDS,
                     cookies: str = COOKIES,
                     quality: int = DEFAULT_WEBP_QUALITY,
-                    width: int = DEFAULT_WIDTH) -> Path:  # <-- Added width
+                    width: int = DEFAULT_WIDTH) -> Path:
     """Return a local WebP holding a frame from `video_id` at `at_seconds`.
 
     Cached by slug: subsequent calls return the existing file without
