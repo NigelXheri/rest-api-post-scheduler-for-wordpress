@@ -40,6 +40,16 @@ def upload_media(path: Path) -> int:
     r.raise_for_status()
     return r.json()["id"]
 
+def find_existing(filename: str) -> int | None:
+    r = requests.get(
+        f"{WP_URL}/wp-json/wp/v2/media",
+        params={"search": filename, "per_page": 1},
+        auth=auth, timeout=10,
+    )
+    r.raise_for_status()
+    items = r.json()
+    return items[0]["id"] if items else None
+
 
 if __name__ == "__main__":
     import sys
