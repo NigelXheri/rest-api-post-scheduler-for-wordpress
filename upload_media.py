@@ -27,7 +27,7 @@ def upload_media(path: Path) -> int:
     content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
 
     with open(path, "rb") as f:
-        r = requests.post(
+        response = requests.post(
             f"{WP_URL}/wp-json/wp/v2/media",
             auth=auth,
             headers={
@@ -37,17 +37,17 @@ def upload_media(path: Path) -> int:
             data=f,
             timeout=60,
         )
-    r.raise_for_status()
-    return r.json()["id"]
+    response.raise_for_status()
+    return response.json()["id"]
 
 def find_existing(filename: str) -> int | None:
-    r = requests.get(
+    response = requests.get(
         f"{WP_URL}/wp-json/wp/v2/media",
         params={"search": filename, "per_page": 1},
         auth=auth, timeout=10,
     )
-    r.raise_for_status()
-    items = r.json()
+    response.raise_for_status()
+    items = response.json()
     return items[0]["id"] if items else None
 
 
