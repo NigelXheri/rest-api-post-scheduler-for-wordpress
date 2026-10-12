@@ -161,7 +161,16 @@ def extract_page(page):
             dropcap = "".join(
                 span_text(s).strip() for s in line["raw"]["spans"] if s["size"] > 20
             )
+            after_dropcap = True
             continue
+
+        if after_dropcap:
+            # The line right after a dropcap is the continuation of the
+            # dropcap's own row
+            paragraphs.append(([line["text"]], "prose"))
+            after_dropcap = False
+            continue
+
         indented = indent_lo < line["x"] < indent_hi
         if (
             indented
