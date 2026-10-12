@@ -81,11 +81,13 @@ def package_specific_post(pdf_path, page_num):
     except LookupError as e:
         raise SystemExit(f"Cannot schedule post: {e}")
 
+    quote_ref = data.get("quote_ref").replace(" ", "\u00a0")
+
     quote = (
         '\n<p class="has-text-align-center wp-block-paragraph"><i>'
-        + _sub_footnote_refs(data["quote"], new_n, ids)   # (4) fixed
+        + _sub_footnote_refs(data["quote"], new_n, ids)
         + "</i> "
-        + (f' <b class="quote-ref">{data["quote_ref"]}</b>') + "</p>\n"  
+        + (f'<b class="quote-ref">{quote_ref}</b>') + "</p>\n"  
     )
 
     paragraphs_html = "\n\n".join(
