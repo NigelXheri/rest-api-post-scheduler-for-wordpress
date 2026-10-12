@@ -85,7 +85,7 @@ def package_specific_post(pdf_path, page_num):
         '\n<p class="has-text-align-center wp-block-paragraph"><i>'
         + _sub_footnote_refs(data["quote"], new_n, ids)   # (4) fixed
         + "</i> "
-        + "<b>" + data["quote_ref"] + "</b></p>\n"
+        + (f' <b class="quote-ref">{data["quote_ref"]}</b>') + "</p>\n"  
     )
 
     paragraphs_html = "\n\n".join(
