@@ -1,6 +1,7 @@
 .env
 .venv/
 .venv-wsl/
+.wsl-venv/
 credentials.json
 token.json
 __pycache__/
