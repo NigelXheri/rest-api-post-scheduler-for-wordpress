@@ -114,10 +114,12 @@ def extract_page(page):
             body_lines.append(line)
             body_started = True
         elif brandon and line["size"] >= 13:  # title
-            result["title"] = despace_letters(line["raw"])
-        elif brandon and line["size"] >= 9.5:  # date
+            title_part = despace_letters(line["raw"])
+            result["title"] = (result["title"] + " " + title_part
+                            if result["title"] else title_part)
+        elif brandon and line["size"] >= 9.5 and result["date"] is None:  # date
             result["date"] = t
-        elif brandon and not body_started:  # quote reference
+        elif brandon and not body_started and result["quote_ref"] is None:  # quote ref
             result["quote_ref"] = t
         elif brandon and body_started:  # closing verse
             result["closing_verse"] = t.strip()
@@ -129,11 +131,24 @@ def extract_page(page):
             elif result["footnotes"]:
                 fn = result["footnotes"][-1]
                 fn["text"] = join_lines([fn["text"], t])
-        elif result["title"] and result["quote_ref"] is None:  # quote lines
-            q = t.strip(
-                " "
-            )  # The quote characters are not stripped from the quote itself here as they are part of the text
-            result["quote"] = join_lines([result["quote"], q]) if result["quote"] else q
+        elif (
+            result["title"]
+            and result["quote_ref"] is None
+            and not body_started
+            and not (result["quote"] or "").rstrip().endswith("”")
+        ):  # still inside the quote
+            q = t.strip()
+            close_idx = q.rfind("”")
+            if close_idx >= 0:
+                quote_part = q[: close_idx + 1]
+                tail       = q[close_idx + 1:].strip()
+                result["quote"] = (
+                    join_lines([result["quote"], quote_part]) if result["quote"] else quote_part
+                )
+                if _looks_like_ref(tail):
+                    result["quote_ref"] = tail
+            else:
+                result["quote"] = join_lines([result["quote"], q]) if result["quote"] else q
         else:  # body text
             body_lines.append(line)
             body_started = True
@@ -207,6 +222,9 @@ def extract_pdf_page(path, page_number):
             )
         return extract_page(doc[page_number - 1])
 
+def _looks_like_ref(s: str) -> bool:
+    """True if `s` looks like a scripture reference, e.g. 'RUTHI 3:1-3'."""
+    return bool(s) and bool(re.search(r"\d", s)) and not re.search(r"[a-zëç]", s)
 
 if __name__ == "__main__":
     import json
