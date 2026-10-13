@@ -459,4 +459,10 @@ Things you must change for a different book or WordPress site:
 
 ## License and notes
 
-Personal project, not intended for redistribution. The devotional PDF is copyrighted by its publisher. This tool only automates posting content to the owner's own website, and the PDF itself is deliberately **not** part of this repository.
+   ## License
+
+   The code is released under the [MIT License](LICENSE).
+
+   This license covers the code only. The devotional PDF is copyrighted by
+   its publisher and is not included in this repository. Note that PyMuPDF
+   (a dependency) is licensed under AGPL-3.0.
