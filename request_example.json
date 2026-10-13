@@ -1,0 +1,144 @@
+[
+    {
+        "id": 12345,
+        "date": "2026-01-01T07:00:00",
+        "date_gmt": "2026-01-01T06:00:00",
+        "guid": {
+            "rendered": "https://example.com/?p=12345"
+        },
+        "modified": "2025-12-31T15:00:00",
+        "modified_gmt": "2025-12-31T14:00:00",
+        "slug": "1-janar-sample-post-title",
+        "status": "future",
+        "type": "post",
+        "link": "https://example.com/?p=12345",
+        "title": {
+            "rendered": "1 January &#8211; Sample Post Title"
+        },
+        "content": {
+            "rendered": "\n<p class=\"wp-block-paragraph\"><em>“Sample quoted verse text goes here.”</em> <strong>BOOK 1:1-2</strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>\n\n\n\n<p class=\"wp-block-paragraph\">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<sup data-fn=\"00000000-0000-4000-8000-000000000000\" class=\"fn\"><a href=\"#00000000-0000-4000-8000-000000000000\" id=\"00000000-0000-4000-8000-000000000000-link\">1</a></sup> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>\n\n\n<ol class=\"wp-block-footnotes\"><li id=\"00000000-0000-4000-8000-000000000000\">Sample Author, “Sample Source” (2000). <a href=\"#00000000-0000-4000-8000-000000000000-link\" aria-label=\"Jump to footnote reference 1\">↩︎</a></li></ol>\n\n\n<p class=\"wp-block-paragraph\"></p>\n",
+            "protected": false
+        },
+        "excerpt": {
+            "rendered": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>\n",
+            "protected": false
+        },
+        "author": 1,
+        "featured_media": 12347,
+        "comment_status": "closed",
+        "ping_status": "closed",
+        "sticky": false,
+        "template": "",
+        "format": "standard",
+        "meta": {
+            "_acf_changed": false,
+            "footnotes": "[{\"content\": \"Sample Author, “Sample Source” (2000).\", \"id\": \"00000000-0000-4000-8000-000000000000\"}]"
+        },
+        "categories": [
+            1,
+            2
+        ],
+        "tags": [],
+        "seria": [],
+        "class_list": [
+            "post-12345",
+            "post",
+            "type-post",
+            "status-future",
+            "format-standard",
+            "has-post-thumbnail",
+            "hentry",
+            "category-sample-author",
+            "category-sample-category"
+        ],
+        "acf": {
+            "referenca": "BOOK 1:1-2",
+            "video_url": "https://youtu.be/XXXXXXXXXXX"
+        },
+        "_links": {
+            "self": [
+                {
+                    "href": "https://example.com/wp-json/wp/v2/posts/12345",
+                    "targetHints": {
+                        "allow": [
+                            "GET",
+                            "POST",
+                            "PUT",
+                            "PATCH",
+                            "DELETE"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://example.com/wp-json/wp/v2/posts"
+                }
+            ],
+            "about": [
+                {
+                    "href": "https://example.com/wp-json/wp/v2/types/post"
+                }
+            ],
+            "author": [
+                {
+                    "embeddable": true,
+                    "href": "https://example.com/wp-json/wp/v2/users/1"
+                }
+            ],
+            "replies": [
+                {
+                    "embeddable": true,
+                    "href": "https://example.com/wp-json/wp/v2/comments?post=12345"
+                }
+            ],
+            "version-history": [
+                {
+                    "count": 3,
+                    "href": "https://example.com/wp-json/wp/v2/posts/12345/revisions"
+                }
+            ],
+            "predecessor-version": [
+                {
+                    "id": 12346,
+                    "href": "https://example.com/wp-json/wp/v2/posts/12345/revisions/12346"
+                }
+            ],
+            "wp:featuredmedia": [
+                {
+                    "embeddable": true,
+                    "href": "https://example.com/wp-json/wp/v2/media/12347"
+                }
+            ],
+            "wp:attachment": [
+                {
+                    "href": "https://example.com/wp-json/wp/v2/media?parent=12345"
+                }
+            ],
+            "wp:term": [
+                {
+                    "taxonomy": "category",
+                    "embeddable": true,
+                    "href": "https://example.com/wp-json/wp/v2/categories?post=12345"
+                },
+                {
+                    "taxonomy": "post_tag",
+                    "embeddable": true,
+                    "href": "https://example.com/wp-json/wp/v2/tags?post=12345"
+                },
+                {
+                    "taxonomy": "seria",
+                    "embeddable": true,
+                    "href": "https://example.com/wp-json/wp/v2/seria?post=12345"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    }
+]
