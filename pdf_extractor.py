@@ -5,8 +5,6 @@ TFL devotional PDF -> structured post data (one page = one post).
 Extracts per page: date, title, daily quote + reference, body paragraphs
 (with line breaks preserved for verse), footnotes, and closing verse.
 Skips the page number and "Plani i leximit..." footer.
-
-Requires: pip install pymupdf
 """
 
 import re

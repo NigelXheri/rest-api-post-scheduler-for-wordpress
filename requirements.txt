@@ -17,3 +17,5 @@ pymupdf==1.28.2
 yt-dlp==2026.8.19
 deno>=2.3.0
 yt-dlp-ejs==0.8.0
+
+# System dependencies (install with apt): ffmpeg, webp
